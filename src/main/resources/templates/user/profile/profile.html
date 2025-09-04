@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5PLUS ONLINE - Hồ sơ cá nhân</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+<!-- Navigation -->
+<nav class="bg-white shadow-lg fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold gradient-text">
+                    <i class="fas fa-plus-circle mr-2"></i>
+                    5PLUS ONLINE
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="/" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Trang chủ</a>
+                <a href="#about" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Giới thiệu</a>
+                <a href="#services" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Dịch vụ</a>
+                <a href="#portfolio" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Portfolio</a>
+                <a href="#contact" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium">
+                    Liên hệ
+                </a>
+
+                <!-- Nếu đã đăng nhập -->
+                <div sec:authorize="isAuthenticated()" class="relative">
+                    <button id="userMenuBtn"
+                            class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium">
+                        Xin chào, <span th:text="${#authentication.name}">User</span>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden z-50">
+                        <a href="/user/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a>
+                        <a href="/user/notifications" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Thông báo</a>
+                        <a href="/user/contracts" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hợp đồng của tôi</a>
+                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600 transition duration-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden pb-4">
+            <a href="#home" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Trang chủ</a>
+            <a href="#about" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Giới thiệu</a>
+            <a href="#services" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Dịch vụ</a>
+            <a href="#portfolio" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Portfolio</a>
+            <a href="#contact" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Liên hệ</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="pt-28 pb-20">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white shadow-2xl rounded-3xl p-8 card-hover">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                        Hồ sơ <span class="gradient-text">cá nhân</span>
+                    </h1>
+                    <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+                </div>
+
+                <!-- Avatar Section -->
+                <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 mb-12">
+                    <div class="relative">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1">
+                            <img th:src="@{/images/avatar/gd.png}" alt="Avatar"
+                                 class="w-full h-full rounded-full object-cover bg-white">
+                        </div>
+                        <div class="absolute bottom-2 right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white"></div>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2" th:text="${user.username}">Nguyễn Văn A</h2>
+                        <p class="text-lg text-gray-600 mb-2">@<span th:text="${user.username}">username</span></p>
+                        <div class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full">
+                            <i class="fas fa-crown text-yellow-500 mr-2"></i>
+                            <span class="text-sm font-semibold text-gray-700" th:text="${user.role}">USER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Info Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Email</p>
+                                <p class="text-lg font-semibold text-gray-800" th:text="${user.email}">user@email.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-phone text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Số điện thoại</p>
+                                <p class="text-lg font-semibold text-gray-800" th:text="${user.SDT}">0123456789</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-map-marker-alt text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Địa chỉ</p>
+                                <p class="text-lg font-semibold text-gray-800" th:text="${user.address}">Hà Nội</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-user-shield text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Vai trò</p>
+                                <p class="text-lg font-semibold text-gray-800" th:text="${user.role}">USER</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-2xl border border-indigo-200">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-calendar-plus text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Ngày tạo</p>
+                                <p class="text-lg font-semibold text-gray-800" th:text="${#temporals.format(user.created_at, 'dd/MM/yyyy HH:mm')}">01/08/2025</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-2xl border border-pink-200">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-clock text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 font-medium">Cập nhật lần cuối</p>
+                                <p class="text-lg font-semibold text-gray-800" th:text="${#temporals.format(user.updated_at, 'dd/MM/yyyy HH:mm')}">20/08/2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/user/edit" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:shadow-xl transition duration-300 transform hover:scale-105 text-center">
+                        <i class="fas fa-edit mr-2"></i>
+                        Chỉnh sửa hồ sơ
+                    </a>
+                    <a href="/" class="border-2 border-blue-500 text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition duration-300 transform hover:scale-105 text-center">
+                        <i class="fas fa-home mr-2"></i>
+                        Quay về Trang Chủ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-black text-gray-300 py-16">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="text-3xl font-bold gradient-text mb-6">
+                        <i class="fas fa-plus-circle mr-3"></i>
+                        5PLUS ONLINE
+                    </div>
+                    <p class="mb-6 leading-relaxed text-gray-400">
+                        Đơn vị tiên phong trong lĩnh vực truyền thông số và quảng cáo sáng tạo.
+                        Chúng tôi mang đến giải pháp marketing toàn diện, giúp thương hiệu của bạn
+                        tỏa sáng trong thời đại số.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-facebook-f text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-instagram text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-linkedin-in text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-youtube text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold text-lg mb-6">Dịch vụ</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-white transition duration-300">Sản xuất Video</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Digital Marketing</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Branding & Design</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Social Media</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Event Marketing</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold text-lg mb-6">Liên hệ</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mr-3 mt-1 text-blue-500"></i>
+                            <span class="text-sm">123 Nguyễn Văn Trỗi, Phú Nhuận, TP.HCM</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-purple-500"></i>
+                            <span class="text-sm">0909 123 456</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-orange-500"></i>
+                            <span class="text-sm">hello@5plusonline.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-500">&copy; 2025 5PLUS ONLINE. Tất cả quyền được bảo lưu.</p>
+                <p class="text-gray-600 text-sm mt-2">Thiết kế và phát triển bởi 5PLUS ONLINE</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Dropdown hồ sơ (đóng/mở, click ngoài, Esc)
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("userMenuBtn");
+      const dropdown = document.getElementById("userDropdown");
+
+      if (!btn || !dropdown) return;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.classList.contains("hidden")
+            && !btn.contains(e.target)
+            && !dropdown.contains(e.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !dropdown.classList.contains("hidden")) {
+          dropdown.classList.add("hidden");
+        }
+      });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hợp đồng của bạn</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .service-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .service-card:hover {
+      background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    .hero-pattern {
+      background-image: radial-gradient(circle at 25% 25%, #667eea 0%, transparent 50%),
+                      radial-gradient(circle at 75% 75%, #764ba2 0%, transparent 50%);
+    }
+  </style>
+</head>
+<body class="font-sans bg-gray-50">
+<div th:replace="~{/user/contracts/_tabs :: tabs('contracts')}"></div>
+
+<!-- Header -->
+<header class="hero-pattern text-white relative overflow-hidden">
+  <div class="absolute inset-0 bg-black/20"></div>
+  <div class="container mx-auto px-4 lg:px-8 py-16 relative z-10">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="mb-6">
+        <i class="fas fa-file-contract text-6xl text-white/80 mb-4"></i>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        Hợp đồng của tôi
+      </h1>
+      <p class="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto">
+        Theo dõi giá trị, tình trạng và số tiền đã thanh toán một cách chi tiết và chuyên nghiệp
+      </p>
+    </div>
+  </div>
+</header>
+
+<main class="container mx-auto px-4 lg:px-8 py-16">
+  <!-- Empty State -->
+  <div th:if="${#lists.isEmpty(contracts)}"
+       class="max-w-2xl mx-auto text-center">
+    <div class="service-card p-12 rounded-3xl shadow-lg">
+      <div class="mb-8">
+        <i class="fas fa-file-contract text-6xl text-gray-300"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-4">Chưa có hợp đồng nào</h3>
+      <p class="text-gray-600 text-lg leading-relaxed">
+        Bạn chưa có hợp đồng nào trong hệ thống. Liên hệ với chúng tôi để bắt đầu dự án đầu tiên của bạn.
+      </p>
+      <div class="mt-8">
+        <a href="#contact" class="inline-flex items-center px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold hover:shadow-xl transition duration-300 transform hover:scale-105">
+          <i class="fas fa-plus mr-3"></i>
+          Tạo hợp đồng mới
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contracts Grid -->
+  <div th:if="${!#lists.isEmpty(contracts)}" class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Danh sách <span class="gradient-text">hợp đồng</span>
+      </h2>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      <article th:each="c : ${contracts}" class="service-card rounded-3xl shadow-lg overflow-hidden card-hover">
+        <div class="p-8">
+          <!-- Header -->
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <h2 class="text-2xl font-bold gradient-text mb-2" th:text="${c.code}">CT-1</h2>
+              <p class="text-gray-600 flex items-center">
+                <i class="fas fa-calendar-alt mr-2 text-blue-500"></i>
+                Ký ngày <span th:text="${#temporals.format(c.signedAt,'dd/MM/yyyy')}">--/--/----</span>
+              </p>
+            </div>
+            <span th:replace="~{/user/contracts/_status-badge :: badge(${c.status})}" class="px-4 py-2 rounded-full text-sm font-semibold"></span>
+          </div>
+
+          <!-- Contract Details -->
+          <div class="grid grid-cols-2 gap-6 mb-6">
+            <div class="text-center p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl">
+              <div class="text-gray-500 text-sm mb-1">Bắt đầu</div>
+              <div class="font-semibold text-gray-900" th:text="${c.startDate != null ? #temporals.format(c.startDate,'dd/MM/yyyy') : '—'}">—</div>
+            </div>
+            <div class="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
+              <div class="text-gray-500 text-sm mb-1">Kết thúc</div>
+              <div class="font-semibold text-gray-900" th:text="${c.endDate != null ? #temporals.format(c.endDate,'dd/MM/yyyy') : '—'}">—</div>
+            </div>
+          </div>
+
+          <!-- Financial Info -->
+          <div class="space-y-4 mb-6">
+            <div class="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl">
+              <span class="text-gray-600 font-medium">Giá trị hợp đồng</span>
+              <span class="font-bold text-green-600 text-lg" th:text="${#numbers.formatDecimal(c.totalValue,0,'POINT',0,'COMMA')} + ' VNĐ'">0 VNĐ</span>
+            </div>
+            <div class="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl">
+              <span class="text-gray-600 font-medium">Đã thanh toán</span>
+              <span class="font-bold text-blue-600 text-lg" th:text="${#numbers.formatDecimal(c.paidAmount,0,'POINT',0,'COMMA')} + ' VNĐ'">0 VNĐ</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mb-6"
+               th:with="
+       paidD=${c.paidAmount != null ? c.paidAmount.doubleValue() : 0.0},
+       totalD=${c.totalValue  != null ? c.totalValue.doubleValue()  : 0.0},
+       perc=${totalD > 0 ? (paidD * 100.0 / totalD) : 0.0},
+       percInt=${T(java.lang.Math).round(perc)}">
+
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium text-gray-600">Tiến độ thanh toán</span>
+              <span class="text-sm font-bold text-gray-900"
+                    th:text="${percInt} + '%'">0%</span>
+            </div>
+
+            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
+                   th:style="'width:' + ${perc} + '%;'">
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="text-center">
+            <a th:href="@{/user/contracts/payments(contractId=${c.id})}"
+               class="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold hover:shadow-xl transition duration-300 transform hover:scale-105 w-full justify-center">
+              <i class="fas fa-credit-card mr-3"></i>
+              Quản lý thanh toán
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+
+<!-- Footer CTA -->
+<section class="py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+        Cần hỗ trợ với hợp đồng?
+      </h2>
+      <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+        Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#contact" class="inline-flex items-center px-8 py-4 rounded-full bg-white text-blue-600 font-semibold hover:bg-gray-100 transition duration-300 transform hover:scale-105">
+          <i class="fas fa-phone mr-3"></i>
+          Liên hệ hỗ trợ
+        </a>
+        <a href="#" class="inline-flex items-center px-8 py-4 rounded-full border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition duration-300 transform hover:scale-105">
+          <i class="fas fa-question-circle mr-3"></i>
+          Câu hỏi thường gặp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

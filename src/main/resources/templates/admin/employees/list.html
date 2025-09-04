@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Nhân viên - Advertising Company</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+<div class="flex">
+    <!-- Applied sidebar from dashboard -->
+    <div th:replace="/admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="flex-1 min-h-screen ml-64">
+        <!-- Applied header from dashboard -->
+        <div th:replace="/admin/fragments/header :: header"></div>
+
+        <!-- Main Content -->
+        <main class="p-6">
+            <!-- Page Title -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Danh sách Nhân viên</h1>
+                        <p class="text-gray-600">Quản lý và theo dõi thông tin nhân viên</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <a th:href="@{/admin/dashboard}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Về trang chủ
+                        </a>
+                        <a th:href="@{/admin/employees/create}" class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg transition-all shadow-lg hover:shadow-xl">
+                            <i class="fas fa-plus mr-2"></i>
+                            Tạo nhân viên mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                <form class="flex items-center justify-between" method="get" th:action="@{/admin/employees}">
+                    <div class="flex items-center space-x-4 flex-1">
+                        <div class="relative flex-1 max-w-md">
+                            <input type="text" name="search" th:value="${search}"
+                                   placeholder="Tìm kiếm theo tên, email hoặc vai trò..."
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                            <i class="fas fa-search mr-2"></i>
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Employees Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nhân viên</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">SĐT</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vai trò</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Phòng ban</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ngày tạo</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                        <tr th:each="employee : ${employees}" class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${employee.id}">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
+                                        <img th:if="${employee.photoUrl != null}" th:src="@{${employee.photoUrl}}" alt="avatar" class="w-full h-full object-cover">
+                                        <div th:if="${employee.photoUrl == null}" class="w-full h-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center">
+                                            <i class="fas fa-user text-white text-sm"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm font-medium text-gray-900" th:text="${employee.fullName}">Nguyễn Văn A</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900" th:text="${employee.email}">email@example.com</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900" th:text="${employee.phone}">0123456789</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span th:class="${employee.role == 'ADMIN' ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800' :
+                                                employee.role == 'MANAGER' ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800' :
+                                                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'}"
+                                      th:text="${employee.role}">ADMIN</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-building text-white text-xs"></i>
+                                    </div>
+                                    <div class="text-sm font-medium text-gray-900" th:text="${employee.department != null ? employee.department.name : 'Chưa có'}">Marketing</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                <div th:text="${#temporals.format(employee.created_at, 'dd/MM/yyyy')}">01/01/2025</div>
+                                <div class="text-xs text-gray-400" th:text="${#temporals.format(employee.created_at, 'HH:mm')}">10:30</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex items-center space-x-2">
+                                    <a th:href="@{/admin/employees/edit/{id}(id=${employee.id})}"
+                                       class="inline-flex items-center px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors">
+                                        <i class="fas fa-edit mr-1"></i>
+                                        Sửa
+                                    </a>
+                                    <a th:href="@{/admin/employees/delete/{id}(id=${employee.id})}"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?')"
+                                       class="inline-flex items-center px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors">
+                                        <i class="fas fa-trash mr-1"></i>
+                                        Xóa
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Applied footer from dashboard -->
+        <div th:replace="/admin/fragments/footer :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

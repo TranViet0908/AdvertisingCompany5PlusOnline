@@ -1,0 +1,152 @@
+<nav th:fragment="tabs(active)"
+     xmlns:th=""
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     class="bg-white shadow-lg fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="flex justify-between items-center py-4">
+
+      <!-- LEFT: Brand + links -->
+      <div class="flex items-center space-x-8">
+        <!-- Brand -->
+        <a th:href="@{/}" class="text-2xl font-bold gradient-text flex items-center">
+          <i class="fas fa-plus-circle mr-2"></i> 5PLUS ONLINE
+        </a>
+
+        <!-- Primary links (cỡ chữ, spacing như index) -->
+        <div class="hidden md:flex space-x-8 items-center">
+          <a th:href="@{/}" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+             th:classappend="${active}=='home' ? ' text-blue-600' : ''">Trang chủ</a>
+
+          <a th:href="@{/user/contracts}" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+             th:classappend="${active}=='contracts' ? ' text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-full' : ''">Hợp đồng</a>
+
+          <a th:href="@{/user/contracts/payments}" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+             th:classappend="${active}=='payments' ? ' text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-full' : ''">Thanh toán</a>
+
+          <a th:href="@{/user/contracts/approvals}" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+             th:classappend="${active}=='approvals' ? ' text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-full' : ''">Phê duyệt</a>
+
+          <a th:href="@{/user/contracts/progress}" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+             th:classappend="${active}=='progress' ? ' text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-full' : ''">Tiến trình</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: User dropdown (y hệt index) -->
+      <div class="hidden md:flex items-center space-x-3">
+        <!-- Nếu chưa đăng nhập -->
+        <div sec:authorize="isAnonymous()">
+          <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
+            <i class="fas fa-sign-in-alt me-1"></i>Login
+          </a>
+          <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/register">
+            <i class="fas fa-user-plus me-1"></i>Register
+          </a>
+        </div>
+
+        <!-- Nếu đã đăng nhập -->
+        <div sec:authorize="isAuthenticated()" class="relative">
+          <button id="userMenuBtn"
+                  class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium">
+            Xin chào, <span th:text="${#authentication.name}">User</span>
+          </button>
+          <!-- Dropdown menu -->
+          <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+            <a href="/user/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a>
+            <a href="/user/notifications" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Thông báo</a>
+            <a href="/user/contracts" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hợp đồng của tôi</a>
+            <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile button -->
+      <div class="md:hidden">
+        <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600 transition duration-300">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4">
+      <a th:href="@{/}" class="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+         th:classappend="${active}=='home' ? ' text-blue-600' : ''">Trang chủ</a>
+      <a th:href="@{/user/contracts}" class="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+         th:classappend="${active}=='contracts' ? ' text-blue-600' : ''">Hợp đồng</a>
+      <a th:href="@{/user/contracts/payments}" class="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+         th:classappend="${active}=='payments' ? ' text-blue-600' : ''">Thanh toán</a>
+      <a th:href="@{/user/contracts/approvals}" class="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+         th:classappend="${active}=='approvals' ? ' text-blue-600' : ''">Phê duyệt</a>
+      <a th:href="@{/user/contracts/progress}" class="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+         th:classappend="${active}=='progress' ? ' text-blue-600' : ''">Tiến trình</a>
+    </div>
+  </div>
+
+  <style>
+  /* Đệm cho nội dung bên dưới thanh nav fixed */
+  :root { --nav-h: 72px; }       /* default dự phòng */
+  body  { padding-top: var(--nav-h); }
+</style>
+
+  <script>
+    (function () {
+      const nav = document.getElementById('navbar') || document.querySelector('nav.fixed, nav.sticky') || null;
+
+      function setOffset() {
+        const h = nav ? nav.offsetHeight : 72;
+        document.documentElement.style.setProperty('--nav-h', h + 'px');
+      }
+
+      window.addEventListener('load', setOffset);
+      window.addEventListener('resize', setOffset);
+
+      // Mobile menu
+      const mbBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mbBtn && mobileMenu) {
+        mbBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          mobileMenu.classList.toggle('hidden');
+          setTimeout(setOffset, 0);
+        });
+        document.addEventListener('click', (e) => {
+          if (!mobileMenu.classList.contains('hidden') && !mbBtn.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+            setTimeout(setOffset, 0);
+          }
+        });
+      }
+
+      // User dropdown
+      const userBtn = document.getElementById('userMenuBtn');
+      const userDd  = document.getElementById('userDropdown');
+      if (userBtn && userDd) {
+        // mở/đóng khi bấm nút
+        userBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          userDd.classList.toggle('hidden');
+          setTimeout(setOffset, 0);
+        });
+
+        // đóng khi click ra ngoài
+        document.addEventListener('click', (e) => {
+          if (!userDd.classList.contains('hidden') &&
+              !userDd.contains(e.target) &&
+              !userBtn.contains(e.target)) {
+            userDd.classList.add('hidden');
+            setTimeout(setOffset, 0);
+          }
+        });
+
+        // đóng khi nhấn ESC
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !userDd.classList.contains('hidden')) {
+            userDd.classList.add('hidden');
+            setTimeout(setOffset, 0);
+          }
+        });
+      }
+    })();
+  </script>
+</nav>

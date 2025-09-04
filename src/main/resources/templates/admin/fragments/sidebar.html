@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Optional: scrollbar đẹp hơn một chút */
+    .nice-scrollbar::-webkit-scrollbar { width: 8px; }
+    .nice-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); }
+    .nice-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 9999px; }
+    .nice-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }
+  </style>
+</head>
+<body>
+<!-- Sidebar cố định, cao 100vh, cuộn dọc -->
+<div th:fragment="sidebar"
+     class="bg-gradient-to-b from-gray-900 to-gray-800 text-white w-64 h-screen shadow-2xl fixed left-0 top-0 z-40 overflow-y-auto overscroll-contain nice-scrollbar">
+  <!-- Logo section -->
+  <div class="p-6 border-b border-gray-700/50">
+    <a href="/admin/dashboard" class="flex items-center space-x-3 group">
+      <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+        <img src="/assets/img/5PlusOnlineLogo.png" alt="Logo" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <i class="fas fa-bullhorn text-white text-sm hidden"></i>
+      </div>
+      <div>
+        <div class="font-bold text-lg text-white group-hover:text-blue-300 transition-colors duration-200">
+          5Plus Online
+        </div>
+        <div class="text-xs text-gray-400">Company</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Navigation menu -->
+  <div class="py-4">
+    <nav class="space-y-1 px-3">
+      <!-- Dashboard -->
+      <a href="/admin/dashboard" id="nav-dashboard" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-home w-5 text-center group-hover:text-blue-400 transition-colors duration-200"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+
+      <!-- AdProject -->
+      <a href="/admin/adProjects" id="nav-adProjects" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-ad w-5 text-center group-hover:text-yellow-400 transition-colors duration-200"></i>
+        <span>Dự án quảng cáo</span>
+      </a>
+
+      <!--Approvals-->
+      <a href="/admin/approvals" id="nav-approvals"
+         class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-stamp w-5 text-center group-hover:text-red-400 transition-colors duration-200"></i>
+        <span>Phê duyệt</span>
+      </a>
+
+      <!-- Client -->
+      <a href="/admin/clients" id="nav-clients" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-user w-5 text-center group-hover:text-green-400 transition-colors duration-200"></i>
+        <span>Khách hàng</span>
+      </a>
+
+      <!-- Company -->
+      <a href="/admin/companies" id="nav-companies" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-building w-5 text-center group-hover:text-purple-400 transition-colors duration-200"></i>
+        <span>Công ty</span>
+      </a>
+
+      <!-- Contract -->
+      <a href="/admin/contracts" id="nav-contracts" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-file-contract w-5 text-center group-hover:text-orange-400 transition-colors duration-200"></i>
+        <span>Hợp đồng</span>
+      </a>
+
+      <!-- Department -->
+      <a href="/admin/departments" id="nav-departments" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-sitemap w-5 text-center group-hover:text-indigo-400 transition-colors duration-200"></i>
+        <span>Phòng ban</span>
+      </a>
+
+      <!-- Employee -->
+      <a href="/admin/employees" id="nav-employees" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-users w-5 text-center group-hover:text-teal-400 transition-colors duration-200"></i>
+        <span>Nhân viên</span>
+      </a>
+
+      <!-- Partner -->
+      <a href="/admin/partners" id="nav-partners" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-handshake w-5 text-center group-hover:text-pink-400 transition-colors duration-200"></i>
+        <span>Đối tác</span>
+      </a>
+
+      <!-- Payments -->
+      <a href="/admin/payments" id="nav-payments" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-wallet w-5 text-center group-hover:text-cyan-400 transition-colors duration-200"></i>
+        <span>Thanh toán</span>
+      </a>
+
+      <!-- Progress Report -->
+      <a href="/admin/progressReports" id="nav-progressReports" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-chart-line w-5 text-center group-hover:text-emerald-400 transition-colors duration-200"></i>
+        <span>Báo cáo tiến độ</span>
+      </a>
+
+      <!-- Contacts -->
+      <a href="/admin/contacts" id="nav-contacts" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-address-book w-5 text-center group-hover:text-orange-400 transition-colors duration-200"></i>
+        <span>Liên hệ</span>
+      </a>
+
+      <!-- Work Task -->
+      <a href="/admin/work-tasks" id="nav-work-tasks" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-tasks w-5 text-center group-hover:text-cyan-400 transition-colors duration-200"></i>
+        <span>Nhiệm vụ công việc</span>
+      </a>
+
+      <!-- User Management (Admin only) -->
+      <a href="/admin/users" id="nav-users" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700/50 hover:text-white transition-all duration-200 group">
+        <i class="fas fa-user-cog w-5 text-center group-hover:text-red-400 transition-colors duration-200"></i>
+        <span>Quản lý người dùng</span>
+        <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">Admin</span>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- Active menu highlight -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentPath = window.location.pathname;
+
+    // Reset styles
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.remove('bg-blue-600/20', 'text-blue-300', 'border-l-4', 'border-blue-500', 'shadow-sm');
+      item.classList.add('text-gray-300');
+    });
+
+    // Map path -> nav id (đồng bộ dạng số nhiều)
+    const routes = [
+      { key: '/dashboard', id: 'nav-dashboard' },
+      { key: '/adProjects', id: 'nav-adProjects' },
+      { key: '/approvals', id: 'nav-approvals' },
+      { key: '/clients', id: 'nav-clients' },
+      { key: '/companies', id: 'nav-companies' },
+      { key: '/contracts', id: 'nav-contracts' },
+      { key: '/contacts', id: 'nav-contacts' },
+      { key: '/departments', id: 'nav-departments' },
+      { key: '/employees', id: 'nav-employees' },
+      { key: '/partners', id: 'nav-partners' },
+      { key: '/progressReports', id: 'nav-progressReports' },
+      { key: '/payments', id: 'nav-payments' },
+      { key: '/work-tasks', id: 'nav-work-tasks' },
+      { key: '/users', id: 'nav-users' },
+    ];
+
+    const found = routes.find(r => currentPath.includes(r.key));
+    if (found) {
+      const activeNav = document.getElementById(found.id);
+      if (activeNav) {
+        activeNav.classList.remove('text-gray-300');
+        activeNav.classList.add('bg-blue-600/20', 'text-blue-300', 'border-l-4', 'border-blue-500', 'shadow-sm');
+      }
+    }
+  });
+</script>
+</body>
+</html>

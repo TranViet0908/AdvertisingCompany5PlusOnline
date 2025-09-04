@@ -1,0 +1,31 @@
+# Build
+/target/
+
+# IntelliJ / VSCode
+*.iml
+.idea/
+.vscode/
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+*.log
+logs/
+tmp/
+*.tmp
+
+# Node/Tailwind (nếu có)
+/node_modules/
+/dist/
+/build/
+
+# Secrets (KHÔNG commit file cấu hình thật)
+/src/main/resources/application.properties
+/src/main/resources/application.yml
+.env
+
+# Cho phép file mẫu cấu hình (commit được)
+!/src/main/resources/application-example.properties
+!/src/main/resources/application-example.yml

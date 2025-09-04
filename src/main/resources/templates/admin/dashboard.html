@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Advertising Company</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+<div class="flex">
+    <!-- Sidebar -->
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Thêm ml-64 để tránh sidebar che khuất nội dung -->
+    <div class="flex-1 min-h-screen ml-64">
+        <!-- Header -->
+        <div th:replace="admin/fragments/header :: header"></div>
+
+        <!-- Main Content -->
+        <main class="p-6">
+            <!-- Page Title -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+                <p class="text-gray-600">Tổng quan về hoạt động của công ty</p>
+            </div>
+
+            <!-- Updated stats cards to match reference template with proper Thymeleaf variables -->
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Projects Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Dự án</p>
+                            <p class="text-3xl font-bold text-gray-900" th:text="${totalAdProjects ?: 0}">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-project-diagram text-white text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-600 font-medium">+12%</span>
+                        <span class="text-gray-500 ml-1">so với tháng trước</span>
+                    </div>
+                </div>
+
+                <!-- Employees Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Nhân viên</p>
+                            <p class="text-3xl font-bold text-gray-900" th:text="${totalEmployees ?: 0}">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-users text-white text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-600 font-medium">+5%</span>
+                        <span class="text-gray-500 ml-1">so với tháng trước</span>
+                    </div>
+                </div>
+
+                <!-- Tasks Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Hợp đồng</p>
+                            <p class="text-3xl font-bold text-gray-900" th:text="${totalContracts ?: 0}">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-tasks text-white text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-600 font-medium">+8%</span>
+                        <span class="text-gray-500 ml-1">so với tháng trước</span>
+                    </div>
+                </div>
+
+                <!-- Reports Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Đối tác</p>
+                            <p class="text-3xl font-bold text-gray-900" th:text="${totalPartners ?: 0}">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-chart-line text-white text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-600 font-medium">+15%</span>
+                        <span class="text-gray-500 ml-1">so với tháng trước</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updated charts section to match reference template layout -->
+            <!-- Charts and Tables -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Chart -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Hợp đồng theo tháng</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm bg-blue-100 text-blue-600 rounded-lg font-medium">Tháng</button>
+                            <button class="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded-lg">Năm</button>
+                        </div>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="projectsChart" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Hợp đồng gần đây</h3>
+                        <a href="/admin/contracts" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Xem tất cả</a>
+                    </div>
+
+                    <div th:if="${recentContracts != null and not #lists.isEmpty(recentContracts)}" class="space-y-4">
+                        <div th:each="contract : ${recentContracts}" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-xs font-bold" th:text="${contract.id}">1</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900" th:text="${contract.client.name + ' - ' + contract.project.name}">Contract Description</p>
+                                    <p class="text-sm text-gray-500" th:text="${#temporals.format(contract.created_at, 'dd/MM/yyyy HH:mm')}">Created At</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div th:unless="${recentContracts != null and not #lists.isEmpty(recentContracts)}" class="text-center py-8">
+                        <i class="fas fa-clock text-gray-300 text-3xl mb-3"></i>
+                        <p class="text-gray-500">Chưa có hợp đồng nào</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <div th:replace="admin/fragments/footer :: footer"></div>
+    </div>
+</div>
+
+<!-- Updated JavaScript to match reference template with proper data handling -->
+<script th:inline="javascript">
+    // Chart configuration
+    const ctx = document.getElementById('projectsChart').getContext('2d');
+
+    // Get data from server with null-safe handling
+    const contractsData = /*[[${contractsByMonth}]]*/ {};
+    const labels = Object.keys(contractsData || {}) || ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+    const data = Object.values(contractsData || {}) || [12, 19, 3, 5, 2, 3, 7, 8, 9, 10, 11, 6];
+
+    const projectsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Số hợp đồng',
+                data: data,
+                borderColor: '#3B82F6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#3B82F6',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#6B7280'
+                    }
+                },
+                y: {
+                    grid: {
+                        color: '#F3F4F6'
+                    },
+                    ticks: {
+                        color: '#6B7280'
+                    }
+                }
+            },
+            elements: {
+                point: {
+                    hoverBackgroundColor: '#1D4ED8'
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

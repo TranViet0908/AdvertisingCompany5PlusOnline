@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5PLUS ONLINE - Chỉnh sửa hồ sơ</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #f093fb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .glass-effect { background: rgba(255,255,255,.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.2); }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+
+<!-- Header giống index.html/profile.html -->
+<nav class="bg-white shadow-lg fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold gradient-text">
+                    <i class="fas fa-plus-circle mr-2"></i>
+                    5PLUS ONLINE
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="/" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Trang chủ</a>
+                <a href="#about" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Giới thiệu</a>
+                <a href="#services" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Dịch vụ</a>
+                <a href="#portfolio" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Portfolio</a>
+                <a href="#contact" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium">Liên hệ</a>
+
+                <!-- Nếu chưa đăng nhập -->
+                <div sec:authorize="isAnonymous()">
+                    <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/register">
+                        <i class="fas fa-user-plus me-1"></i>Register
+                    </a>
+                </div>
+
+                <!-- Nếu đã đăng nhập -->
+                <div sec:authorize="isAuthenticated()" class="relative">
+                    <button id="userMenuBtn" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium">
+                        Xin chào, <span th:text="${#authentication.name}">User</span>
+                    </button>
+                    <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+                        <a href="/user/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a>
+                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600 transition duration-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden pb-4">
+            <a href="/" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Trang chủ</a>
+            <a href="#about" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Giới thiệu</a>
+            <a href="#services" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Dịch vụ</a>
+            <a href="#portfolio" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Portfolio</a>
+            <a href="#contact" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Liên hệ</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main -->
+<main class="pt-28 pb-20">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white shadow-2xl rounded-3xl p-8 card-hover">
+                <!-- Title -->
+                <div class="text-center mb-10">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Chỉnh sửa <span class="gradient-text">hồ sơ</span></h1>
+                    <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+                </div>
+
+                <!-- Flash -->
+                <div th:if="${message}" class="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700">
+                    <i class="fas fa-check-circle mr-2"></i><span th:text="${message}">Cập nhật thành công</span>
+                </div>
+                <div th:if="${error}" class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700">
+                    <i class="fas fa-exclamation-circle mr-2"></i><span th:text="${error}">Có lỗi xảy ra</span>
+                </div>
+
+                <!-- FORM: KHÔNG tham chiếu _csrf, để Spring tự chèn -->
+                <form th:action="@{/user/edit}" th:object="${user}" method="post" enctype="multipart/form-data" class="space-y-8">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Avatar -->
+                        <div class="md:col-span-1">
+                            <div class="flex flex-col items-center">
+                                <div class="w-36 h-36 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1 mb-3">
+                                    <img id="avatarPreview" th:src="@{/images/avatar/gd.png}" alt="Avatar" class="w-full h-full rounded-full object-cover bg-white">
+                                </div>
+                                <label class="w-full">
+                                    <span class="block text-sm font-semibold text-gray-700 mb-2">Ảnh đại diện</span>
+                                    <input type="file" name="avatar" accept="image/*" class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gradient-to-r file:from-blue-500 file:to-purple-600 file:text-white hover:file:opacity-90" onchange="previewAvatar(event)">
+                                </label>
+                                <p class="text-xs text-gray-500 mt-2">PNG/JPG &lt; 2MB</p>
+                            </div>
+                        </div>
+
+                        <!-- Fields -->
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tên đăng nhập</label>
+                                <input th:field="*{username}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50" readonly>
+                                <p class="text-xs text-gray-500 mt-1">Không thể thay đổi tên đăng nhập.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                                <input type="email" th:field="*{email}" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="user@email.com">
+                                <p class="text-sm text-red-600 mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Số điện thoại</label>
+                                <input th:field="*{SDT}" pattern="^(0|\+84)[0-9]{9,10}$" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="0909 123 456">
+                                <p class="text-xs text-gray-500 mt-1">Định dạng: 0xxxxxxxxx hoặc +84xxxxxxxxx</p>
+                                <p class="text-sm text-red-600 mt-1" th:if="${#fields.hasErrors('SDT')}" th:errors="*{SDT}"></p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Địa chỉ</label>
+                                <input th:field="*{address}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Địa chỉ nơi ở / văn phòng">
+                                <p class="text-sm text-red-600 mt-1" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password change -->
+                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl border border-purple-200">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3">
+                                <i class="fas fa-lock text-white"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800">Đổi mật khẩu (tuỳ chọn)</h3>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu hiện tại</label>
+                                <input type="password" name="currentPassword" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="••••••••">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu mới</label>
+                                <input type="password" name="newPassword" minlength="6" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Tối thiểu 6 ký tự">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Xác nhận mật khẩu</label>
+                                <input type="password" name="confirmPassword" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Nhập lại mật khẩu">
+                            </div>
+                        </div>
+                        <p class="text-sm text-red-600 mt-2" th:if="${passwordError}" th:text="${passwordError}"></p>
+                    </div>
+
+                    <!-- Readonly meta -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white p-4 rounded-xl border border-gray-200">
+                            <p class="text-xs text-gray-500">Ngày tạo</p>
+                            <p class="font-semibold" th:text="${#temporals.format(user.created_at, 'dd/MM/yyyy HH:mm')}">--</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-gray-200">
+                            <p class="text-xs text-gray-500">Cập nhật lần cuối</p>
+                            <p class="font-semibold" th:text="${#temporals.format(user.updated_at, 'dd/MM/yyyy HH:mm')}">--</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 pt-2">
+                        <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:shadow-xl transition transform hover:scale-105">
+                            <i class="fas fa-save mr-2"></i>Lưu thay đổi
+                        </button>
+                        <a href="/user/profile" class="border-2 border-blue-500 text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition transform hover:scale-105 text-center">
+                            <i class="fas fa-arrow-left mr-2"></i>Quay lại hồ sơ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer giống index.html/profile.html -->
+<footer class="bg-black text-gray-300 py-16">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="text-3xl font-bold gradient-text mb-6">
+                        <i class="fas fa-plus-circle mr-3"></i>
+                        5PLUS ONLINE
+                    </div>
+                    <p class="mb-6 leading-relaxed text-gray-400">Đơn vị tiên phong trong lĩnh vực truyền thông số và quảng cáo sáng tạo. Chúng tôi mang đến giải pháp marketing toàn diện, giúp thương hiệu của bạn tỏa sáng.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition transform hover:scale-110"><i class="fab fa-facebook-f text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition transform hover:scale-110"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition transform hover:scale-110"><i class="fab fa-linkedin-in text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition transform hover:scale-110"><i class="fab fa-youtube text-2xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold text-lg mb-6">Dịch vụ</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-white transition">Sản xuất Video</a></li>
+                        <li><a href="#" class="hover:text-white transition">Digital Marketing</a></li>
+                        <li><a href="#" class="hover:text-white transition">Branding & Design</a></li>
+                        <li><a href="#" class="hover:text-white transition">Social Media</a></li>
+                        <li><a href="#" class="hover:text-white transition">Event Marketing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold text-lg mb-6">Liên hệ</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><i class="fas fa-map-marker-alt mr-3 mt-1 text-blue-500"></i><span class="text-sm">123 Nguyễn Văn Trỗi, Phú Nhuận, TP.HCM</span></li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-3 text-purple-500"></i><span class="text-sm">0909 123 456</span></li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-3 text-orange-500"></i><span class="text-sm">hello@5plusonline.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-500">&copy; 2025 5PLUS ONLINE. Tất cả quyền được bảo lưu.</p>
+                <p class="text-gray-600 text-sm mt-2">Thiết kế và phát triển bởi 5PLUS ONLINE</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+    // Dropdown user menu
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('userMenuBtn');
+      const dropdown = document.getElementById('userDropdown');
+      if (btn) btn.addEventListener('click', () => dropdown.classList.toggle('hidden'));
+      window.addEventListener('click', (e) => {
+        if (btn && dropdown && !btn.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.add('hidden');
+      });
+    });
+    // Navbar blur on scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 100) navbar.classList.add('bg-white/95','backdrop-blur-md');
+      else navbar.classList.remove('bg-white/95','backdrop-blur-md');
+    });
+    // Avatar preview
+    function previewAvatar(evt){
+      const [file] = evt.target.files; if(!file) return;
+      const img = document.getElementById('avatarPreview');
+      const reader = new FileReader();
+      reader.onload = e => img.src = e.target.result; reader.readAsDataURL(file);
+    }
+</script>
+</body>
+</html>

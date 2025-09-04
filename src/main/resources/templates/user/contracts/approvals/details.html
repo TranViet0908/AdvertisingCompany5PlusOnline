@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title th:text="'Chi tiết phê duyệt • ' + ${header.code}">Chi tiết phê duyệt</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .hero-pattern {
+          background-image: radial-gradient(circle at 25% 25%, #667eea 0%, transparent 50%),
+                           radial-gradient(circle at 75% 75%, #764ba2 0%, transparent 50%);
+        }
+        .card { background: #fff; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+        .section-title { font-size: 1.125rem; font-weight: 700; color: #111827; margin-bottom: 1rem; }
+        .media-thumb { border-radius: .5rem; border: 1px solid #e5e7eb; overflow: hidden; background: #f9fafb; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- Tabs -->
+<div th:replace="~{/user/contracts/_tabs :: tabs('approvals')}"></div>
+
+<!-- Hero -->
+<header class="hero-pattern text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-black/25"></div>
+    <div class="container mx-auto px-4 lg:px-8 py-12 relative z-10">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold">
+                    Chi tiết phê duyệt <span class="opacity-90" th:text="${header.code}">APP-XXXX</span>
+                </h1>
+                <p class="text-white/90 mt-2" th:text="${header.title}">Tiêu đề phê duyệt</p>
+            </div>
+            <!-- Status badge -->
+            <div th:replace="~{/user/contracts/_status-badge :: badge(${header.status})}"></div>
+        </div>
+    </div>
+</header>
+
+<main class="container mx-auto px-4 lg:px-8 py-8 space-y-8">
+
+    <!-- Alerts -->
+    <div th:if="${success}" class="card p-4 border border-green-200 bg-green-50 text-green-800">
+        <i class="fa-regular fa-circle-check mr-2"></i><span th:text="${success}">Thành công</span>
+    </div>
+    <div th:if="${error}" class="card p-4 border border-red-200 bg-red-50 text-red-800">
+        <i class="fa-regular fa-circle-xmark mr-2"></i><span th:text="${error}">Có lỗi</span>
+    </div>
+
+    <!-- Tổng quan -->
+    <section class="card p-6">
+        <h2 class="section-title">Thông tin tổng quan</h2>
+        <div class="grid md:grid-cols-2 gap-6 text-sm">
+            <div class="space-y-2">
+                <div class="flex justify-between"><span class="text-gray-500">Mã yêu cầu</span><span class="font-semibold" th:text="${header.code}">APP-TV-001</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Loại phê duyệt</span><span class="font-semibold" th:text="${header.approve_type}">PRODUCT</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Độ ưu tiên</span><span class="font-semibold" th:text="${header.priority}">HIGH</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Trạng thái</span><span class="font-semibold" th:text="${header.status}">UNDER_REVIEW</span></div>
+            </div>
+            <div class="space-y-2">
+                <div class="flex justify-between"><span class="text-gray-500">Gửi lúc</span><span class="font-semibold" th:text="${header.submitted_at != null ? #temporals.format(header.submitted_at,'dd/MM/yyyy HH:mm') : '—'}">—</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Hạn xử lý</span><span class="font-semibold" th:text="${header.due_date != null ? #temporals.format(header.due_date,'dd/MM/yyyy HH:mm') : '—'}">—</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Ngày quyết định</span><span class="font-semibold" th:text="${header.decided_at != null ? #temporals.format(header.decided_at,'dd/MM/yyyy HH:mm') : '—'}">—</span></div>
+            </div>
+        </div>
+
+        <div class="mt-4 grid md:grid-cols-2 gap-6 text-sm">
+            <div class="space-y-2">
+                <div class="flex justify-between"><span class="text-gray-500">Khách hàng (client_id)</span><span class="font-semibold" th:text="${header.client_id}">—</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Hợp đồng (contract_id)</span><span class="font-semibold" th:text="${header.contract_id}">—</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Dự án (project_id)</span><span class="font-semibold" th:text="${header.project_id}">—</span></div>
+            </div>
+            <div class="space-y-2">
+                <div class="flex justify-between" th:if="${header.amount_requested != null}">
+                    <span class="text-gray-500">Số tiền đề nghị</span>
+                    <span class="font-semibold">
+            <span th:text="${#numbers.formatDecimal(header.amount_requested,0,'COMMA',2,'POINT')}">0</span>
+            <span th:text="${header.currency != null ? header.currency : ''}">VND</span>
+          </span>
+                </div>
+                <div class="flex justify-between" th:if="${header.amount_approved != null}">
+                    <span class="text-gray-500">Số tiền phê duyệt</span>
+                    <span class="font-semibold">
+            <span th:text="${#numbers.formatDecimal(header.amount_approved,0,'COMMA',2,'POINT')}">0</span>
+            <span th:text="${header.currency != null ? header.currency : ''}">VND</span>
+          </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <p class="text-gray-500 mb-1">Mô tả</p>
+            <div class="prose max-w-none text-gray-800" th:text="${header.description}">—</div>
+        </div>
+    </section>
+
+    <!-- Theo loại phê duyệt -->
+    <section class="card p-6">
+        <h2 class="section-title">Thông tin theo loại phê duyệt</h2>
+
+        <!-- PRODUCT: hiển thị gallery -->
+        <div th:if="${header.approve_type != null and header.approve_type.name() == 'PRODUCT'}" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- IMAGE -->
+                <div class="media-thumb" th:each="m : ${children}"
+                     th:if="${m.row_kind != null and m.row_kind.name() == 'MEDIA' and m.media_type != null and m.media_type.name() == 'IMAGE'}">
+                    <img th:src="${m.media_url}" alt="" class="w-full h-40 object-cover">
+                    <div class="p-3 text-sm">
+                        <div class="font-medium" th:text="${m.media_title}">Ảnh</div>
+                        <a th:href="${m.media_url}" target="_blank" class="text-blue-600 hover:underline">Mở ảnh</a>
+                    </div>
+                </div>
+                <!-- VIDEO -->
+                <div class="media-thumb" th:each="v : ${children}"
+                     th:if="${v.row_kind != null and v.row_kind.name() == 'MEDIA' and v.media_type != null and v.media_type.name() == 'VIDEO'}">
+                    <video class="w-full h-40" controls th:src="${v.media_url}"></video>
+                    <div class="p-3 text-sm">
+                        <div class="font-medium" th:text="${v.media_title}">Video</div>
+                        <a th:href="${v.media_url}" target="_blank" class="text-blue-600 hover:underline">Mở video</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEXT -->
+            <div class="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                <h3 class="font-semibold mb-2"><i class="fa-regular fa-file-lines mr-2"></i>Ghi chú nội dung</h3>
+                <div class="space-y-3" th:each="t : ${children}"
+                     th:if="${t.row_kind != null and t.row_kind.name() == 'MEDIA' and t.media_type != null and t.media_type.name() == 'TEXT'}">
+                    <div>
+                        <div class="text-xs text-gray-500" th:text="${t.media_title}">Ghi chú</div>
+                        <div class="text-sm whitespace-pre-wrap" th:text="${t.media_text}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COST: tập trung tiền tệ + diễn giải -->
+        <div th:if="${header.approve_type != null and header.approve_type.name() == 'COST'}" class="space-y-4">
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg text-sm text-amber-900">
+                <i class="fa-solid fa-coins mr-2"></i>
+                Đề nghị chi:
+                <b th:text="${#numbers.formatDecimal(header.amount_requested,0,'COMMA',2,'POINT')}">0</b>
+                <span th:text="${header.currency}">VND</span>
+            </div>
+            <div class="text-sm text-gray-700">
+                <div class="font-medium mb-1">Diễn giải</div>
+                <div class="space-y-3" th:each="t : ${children}"
+                     th:if="${t.row_kind != null and t.row_kind.name() == 'MEDIA' and t.media_type != null and t.media_type.name() == 'TEXT'}">
+                    <div class="whitespace-pre-wrap" th:text="${t.media_text}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loại khác: hiển thị TEXT chung -->
+        <div th:if="${header.approve_type == null
+                 or !(header.approve_type.name() == 'PRODUCT' or header.approve_type.name() == 'COST') }"
+             class="space-y-3 text-sm text-gray-800">
+            <div th:each="t : ${children}"
+                 th:if="${t.row_kind != null and t.row_kind.name() == 'MEDIA' and t.media_type != null and t.media_type.name() == 'TEXT'}">
+                <div class="font-medium" th:text="${t.media_title}">Nội dung</div>
+                <div class="whitespace-pre-wrap" th:text="${t.media_text}"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tệp đính kèm -->
+    <section class="card p-6">
+        <h2 class="section-title">Tệp đính kèm</h2>
+        <div class="space-y-2 text-sm" th:if="${children != null}">
+            <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                 th:each="a : ${children}" th:if="${a.row_kind != null and a.row_kind.name() == 'ATTACH'}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-regular fa-file-lines text-gray-500"></i>
+                    <div>
+                        <div class="font-medium" th:text="${a.attach_name}">file.pdf</div>
+                        <div class="text-gray-500" th:text="${a.attach_mime}">application/pdf</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-gray-500" th:text="${a.attach_size != null ? #numbers.formatInteger(a.attach_size) + ' B' : ''}"></span>
+                    <a class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-50" th:href="${a.attach_url}" target="_blank">Tải xuống</a>
+                </div>
+            </div>
+            <p class="text-gray-500" th:if="${#lists.isEmpty(children)}">Không có tệp đính kèm.</p>
+        </div>
+    </section>
+
+    <!-- Hành động -->
+    <section class="card p-6">
+        <h2 class="section-title">Hành động</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+            <!-- Approve -->
+            <form th:action="@{/user/contracts/approvals/{id}/decision(id=${header.id})}" method="post" class="space-y-3">
+                <input type="hidden" name="decision" value="APPROVED"/>
+                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+                <label class="text-sm text-gray-700">Góp ý khi phê duyệt (không bắt buộc)</label>
+                <textarea name="comment" rows="3" class="w-full border rounded-lg p-3 focus:ring focus:ring-blue-200" placeholder="Ý kiến của bạn..."></textarea>
+                <button type="submit" class="w-full px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">
+                    <i class="fa-solid fa-check mr-2"></i>Phê duyệt
+                </button>
+            </form>
+
+            <!-- Reject -->
+            <form th:action="@{/user/contracts/approvals/{id}/decision(id=${header.id})}" method="post" class="space-y-3">
+                <input type="hidden" name="decision" value="REJECTED"/>
+                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+                <label class="text-sm text-gray-700">Lý do từ chối</label>
+                <textarea name="comment" rows="3" class="w-full border rounded-lg p-3 focus:ring focus:ring-red-200" placeholder="Bạn từ chối vì..."></textarea>
+                <button type="submit" class="w-full px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                    <i class="fa-solid fa-xmark mr-2"></i>Từ chối
+                </button>
+            </form>
+
+            <!-- Needs revision -->
+            <form th:action="@{/user/contracts/approvals/{id}/decision(id=${header.id})}" method="post" class="space-y-3">
+                <input type="hidden" name="decision" value="NEEDS_REVISION"/>
+                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+                <label class="text-sm text-gray-700">Yêu cầu chỉnh sửa</label>
+                <textarea name="comment" rows="3" class="w-full border rounded-lg p-3 focus:ring focus:ring-amber-200" placeholder="Bạn muốn chỉnh sửa điều gì..."></textarea>
+                <button type="submit" class="w-full px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600">
+                    <i class="fa-solid fa-pen-to-square mr-2"></i>Yêu cầu chỉnh sửa
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Thảo luận -->
+    <section class="card p-6">
+        <h2 class="section-title">Thảo luận thêm</h2>
+        <form th:action="@{/user/contracts/approvals/{id}/comments(id=${header.id})}" method="post" class="space-y-3">
+            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+            <textarea name="content" rows="4" class="w-full border rounded-lg p-3 focus:ring focus:ring-purple-200" placeholder="Viết bình luận/góp ý..."></textarea>
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 rounded-lg bg-gray-900 text-white hover:opacity-90">Gửi bình luận</button>
+            </div>
+        </form>
+
+        <!-- Nếu controller bơm thêm 'comments' -->
+        <div class="mt-4 space-y-3" th:if="${comments != null}">
+            <div class="border rounded-lg p-3" th:each="c : ${comments}">
+                <div class="text-sm text-gray-500">
+                    <b th:text="${c.authorName}">User</b>
+                    <span th:text="${#temporals.format(c.createdAt,'dd/MM/yyyy HH:mm')}">01/09/2025 10:00</span>
+                </div>
+                <div class="text-sm whitespace-pre-wrap" th:text="${c.content}"></div>
+            </div>
+        </div>
+    </section>
+    <div class="mb-4">
+        <a
+                href="http://localhost:8080/user/contracts/approvals"
+                th:href="@{/user/contracts/approvals}"
+                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium hover:bg-gray-50 active:scale-[0.99] transition"
+        >
+            <!-- Icon mũi tên trái -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                 fill="currentColor" class="h-5 w-5">
+                <path fill-rule="evenodd"
+                      d="M10.03 3.97a.75.75 0 010 1.06L5.06 10h14.19a.75.75 0 010 1.5H5.06l4.97 4.97a.75.75 0 11-1.06 1.06l-6.25-6.25a.75.75 0 010-1.06l6.25-6.25a.75.75 0 011.06 0z"
+                      clip-rule="evenodd" />
+            </svg>
+            <span>Quay lại danh sách phê duyệt</span>
+        </a>
+    </div>
+    <div class="pb-2"></div>
+</main>
+
+</body>
+</html>

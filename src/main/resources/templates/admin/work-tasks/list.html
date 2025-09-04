@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách Công việc - Advertising Company</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+<div class="flex">
+  <!-- Applied sidebar from progressReports module -->
+  <div th:replace="/admin/fragments/sidebar :: sidebar"></div>
+
+  <div class="flex-1 min-h-screen ml-64">
+    <!-- Applied header from progressReports module -->
+    <div th:replace="/admin/fragments/header :: header"></div>
+
+    <!-- Main Content -->
+    <main class="p-6">
+      <!-- Page Title -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Danh sách Công việc</h1>
+            <p class="text-gray-600">Quản lý và theo dõi các công việc trong dự án</p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <a th:href="@{/admin/dashboard}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
+              <i class="fas fa-arrow-left mr-2"></i>
+              Về trang chủ
+            </a>
+            <a th:href="@{/admin/work-tasks/create}" class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg transition-all shadow-lg hover:shadow-xl">
+              <i class="fas fa-plus mr-2"></i>
+              Tạo công việc mới
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search and Filters -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <form class="flex items-center justify-between" method="get" th:action="@{/admin/work-tasks}">
+          <div class="flex items-center space-x-4 flex-1">
+            <div class="relative flex-1 max-w-md">
+              <input type="text" name="search" th:value="${search}"
+                     placeholder="Tìm kiếm theo tên công việc, mô tả hoặc nhân viên..."
+                     class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+              <i class="fas fa-search mr-2"></i>
+              Tìm kiếm
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Work Tasks Table -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tên công việc</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Dự án</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nhân viên</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ngày bắt đầu</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ngày kết thúc</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Trạng thái</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+            <tr th:each="task : ${tasks}" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${task.id}">1</td>
+              <td class="px-6 py-4">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
+                    <div class="w-full h-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
+                      <i class="fas fa-tasks text-white text-sm"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900" th:text="${task.name}">Tên công việc</div>
+                    <div class="text-sm text-gray-500 max-w-xs truncate" th:text="${task.description}">Mô tả công việc</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mr-3">
+                    <i class="fas fa-project-diagram text-white text-xs"></i>
+                  </div>
+                  <div class="text-sm text-gray-900" th:text="${task.adProject != null ? task.adProject.name : 'Chưa có'}">Dự án A</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mr-3">
+                    <i class="fas fa-user text-white text-xs"></i>
+                  </div>
+                  <div class="text-sm text-gray-900" th:text="${task.employee != null ? task.employee.fullName : 'Chưa có'}">Nguyễn Văn A</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900" th:text="${task.start_date != null ? #temporals.format(task.start_date, 'dd/MM/yyyy') : 'Chưa có'}">01/01/2025</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900" th:text="${task.end_date != null ? #temporals.format(task.end_date, 'dd/MM/yyyy') : 'Chưa có'}">31/01/2025</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                                <span th:class="${task.status == 'Completed' ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800' :
+                                                task.status == 'In Progress' ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800' :
+                                                task.status == 'On Hold' ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800' :
+                                                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800'}"
+                                      th:text="${task.status == 'Not Started' ? 'Chưa bắt đầu' :
+                                               task.status == 'In Progress' ? 'Đang thực hiện' :
+                                               task.status == 'Completed' ? 'Hoàn thành' :
+                                               task.status == 'On Hold' ? 'Tạm dừng' : task.status}">
+                                    Đang thực hiện
+                                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex items-center space-x-2">
+                  <a th:href="@{/admin/work-tasks/edit/{id}(id=${task.id})}"
+                     class="inline-flex items-center px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors">
+                    <i class="fas fa-edit mr-1"></i>
+                    Sửa
+                  </a>
+                  <a th:href="@{/admin/work-tasks/delete/{id}(id=${task.id})}"
+                     onclick="return confirm('Bạn có chắc chắn muốn xóa công việc này?')"
+                     class="inline-flex items-center px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors">
+                    <i class="fas fa-trash mr-1"></i>
+                    Xóa
+                  </a>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Applied footer from progressReports module -->
+    <div th:replace="/admin/fragments/footer :: footer"></div>
+  </div>
+</div>
+</body>
+</html>

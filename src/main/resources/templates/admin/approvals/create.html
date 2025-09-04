@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tạo Phê duyệt Mới - Advertising Company</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-gray-50">
+<div class="flex">
+  <!-- Sidebar -->
+  <div th:replace="/admin/fragments/sidebar :: sidebar"></div>
+
+  <div class="flex-1 min-h-screen ml-64">
+    <!-- Header -->
+    <div th:replace="/admin/fragments/header :: header"></div>
+
+    <main class="p-6">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Tạo phê duyệt mới</h1>
+          <p class="text-gray-600">Điền thông tin phiếu phê duyệt (HEADER)</p>
+        </div>
+        <a th:href="@{/admin/approvals}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
+          <i class="fas fa-arrow-left mr-2"></i> Quay lại danh sách
+        </a>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Thông tin chung</h2>
+          <p class="text-gray-600 mt-1">Các trường có dấu * là bắt buộc</p>
+        </div>
+
+        <form id="approveCreateForm" th:action="@{/admin/approvals}" method="post" class="p-6 space-y-6">
+          <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Mã (Code)</label>
+              <input name="code" type="text" placeholder="VD: APP-2025-001"
+                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tiêu đề *</label>
+              <input name="title" type="text" required
+                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Loại phê duyệt *</label>
+              <select name="approveType" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="" disabled selected>-- Chọn loại --</option>
+                <option th:each="t : ${allApproveTypes}" th:value="${t}" th:text="${t}"></option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Ưu tiên *</label>
+              <select name="priority" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="" disabled selected>-- Chọn ưu tiên --</option>
+                <option th:each="p : ${allPriorities}" th:value="${p}" th:text="${p}"></option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Người yêu cầu (Requester Type) *</label>
+              <select id="requesterType" name="requesterType" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="" disabled selected>-- Chọn --</option>
+                <option th:each="rt : ${allRequesterTypes}" th:value="${rt}" th:text="${rt}"></option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Requester Employee</label>
+                <select id="requesterEmployeeId" name="requesterEmployeeId"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Không chọn --</option>
+                  <option th:each="e : ${employees}" th:value="${e.id}" th:text="${e.fullName}"></option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Requester Client</label>
+                <select id="requesterClientId" name="requesterClientId"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Không chọn --</option>
+                  <option th:each="c : ${clients}" th:value="${c.id}" th:text="${c.name}"></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Client</label>
+                <select id="clientId" name="clientId"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Không chọn --</option>
+                  <option th:each="c : ${clients}" th:value="${c.id}" th:text="${c.name}"></option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Project</label>
+                <select id="projectId" name="projectId"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Không chọn --</option>
+                  <option th:each="p : ${adProjects}" th:value="${p.id}" th:text="${p.name}"></option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Contract</label>
+                <select id="contractId" name="contractId"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Không chọn --</option>
+                  <option th:each="ct : ${contracts}" th:value="${ct.id}" th:text="${ct.code}"></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Số tiền đề nghị</label>
+                <input name="amountRequested" type="number" min="0" step="0.01"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Tiền tệ</label>
+                <select name="currency"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Chọn --</option>
+                  <option th:each="cur : ${currencies}" th:value="${cur}" th:text="${cur}"></option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Đến hạn</label>
+                <input name="dueDate" type="date" placeholder="yyyy-MM-dd"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+              </div>
+            </div>
+
+            <div class="lg:col-span-2">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Mô tả / Lý do</label>
+              <textarea name="description" rows="4"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        placeholder="Diễn giải nhu cầu phê duyệt"></textarea>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <a th:href="@{/admin/approvals}" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
+              <i class="fas fa-times mr-2"></i> Hủy
+            </a>
+            <button type="submit"
+                    class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-lg hover:shadow-xl">
+              <i class="fas fa-save mr-2"></i> Lưu phê duyệt
+            </button>
+          </div>
+        </form>
+        <div class="mt-6 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-4">
+          <div class="font-semibold mb-1">Gắn ảnh / video / tài liệu</div>
+          <p>Sau khi tạo phiếu, hệ thống sẽ chuyển tới trang <b>Chỉnh sửa</b>, nơi bạn có thể thêm
+            <i>MEDIA</i> (Ảnh/Video/Ghi chú) và <i>ATTACH</i> (tài liệu) bằng URL.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="/admin/fragments/footer :: footer"></div>
+  </div>
+</div>
+
+<!-- Liên kết các select liên quan -->
+<script>
+  (function () {
+    const requesterTypeEl = document.getElementById('requesterType');
+    const empEl = document.getElementById('requesterEmployeeId');
+    const cliEl = document.getElementById('requesterClientId');
+    const clientEl = document.getElementById('clientId');
+    const projectEl = document.getElementById('projectId');
+    const contractEl = document.getElementById('contractId');
+
+    function toggleRequester() {
+      const val = requesterTypeEl.value;
+      if (val === 'EMPLOYEE') {
+        empEl.disabled = false; cliEl.disabled = true; cliEl.value = '';
+      } else if (val === 'CLIENT') {
+        empEl.disabled = true; empEl.value = ''; cliEl.disabled = false;
+        if (cliEl.value) clientEl.value = cliEl.value;
+      } else {
+        empEl.disabled = true; cliEl.disabled = true; empEl.value = ''; cliEl.value = '';
+      }
+    }
+    function onRequesterClientChanged() {
+      if (!cliEl.disabled && cliEl.value) clientEl.value = cliEl.value;
+    }
+
+    requesterTypeEl.addEventListener('change', toggleRequester);
+    cliEl.addEventListener('change', onRequesterClientChanged);
+
+    // Init
+    toggleRequester();
+
+    // Hook chỗ sau nếu muốn tải projects/contracts theo client qua AJAX
+    clientEl.addEventListener('change', () => { /* TODO: load deps if needed */ });
+    projectEl.addEventListener('change', () => { /* TODO: load deps if needed */ });
+    contractEl.addEventListener('change', () => { /* TODO: load deps if needed */ });
+  })();
+</script>
+</body>
+</html>
