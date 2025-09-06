@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chỉnh sửa Thông báo - 5PLUS ONLINE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+<div class="flex">
+  <!-- Sidebar dùng chung -->
+  <div th:replace="/admin/fragments/sidebar :: sidebar"></div>
+
+  <div class="flex-1 min-h-screen ml-64">
+    <!-- Header dùng chung -->
+    <div th:replace="/admin/fragments/header :: header"></div>
+
+    <!-- Main -->
+    <main class="p-6">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Chỉnh sửa Thông báo</h1>
+          <p class="text-gray-600">Cập nhật thông tin thông báo</p>
+        </div>
+        <a th:href="@{/admin/notifications}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
+          <i class="fas fa-arrow-left mr-2"></i>Quay lại danh sách
+        </a>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 bg-gradient-to-r from-orange-50 to-red-50 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Thông tin</h2>
+          <p class="text-gray-600 mt-1">Chỉnh sửa các trường cần thiết</p>
+        </div>
+
+        <form th:action="@{/admin/notifications/{id}(id=${notification.id})}" method="post" th:object="${notification}" class="p-6 space-y-6">
+          <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <!-- Info card -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div><span class="text-gray-600">ID:</span> <span class="font-medium text-gray-900" th:text="${notification.id}">1</span></div>
+            <div><span class="text-gray-600">Tạo lúc:</span> <span class="font-medium text-gray-900" th:text="${#dates.format(notification.createdAt, 'dd/MM/yyyy HH:mm')}">01/09/2025 10:00</span></div>
+            <div th:if="${notification.readAt != null}"><span class="text-gray-600">Đọc lúc:</span> <span class="font-medium text-gray-900" th:text="${#temporals.format(notification.readAt, 'dd/MM/yyyy HH:mm')}">01/09/2025 11:00</span></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Recipient User ID</label>
+              <input type="number" min="1" th:field="*{recipientUserId}" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Topic</label>
+              <!-- Tránh T(Enum).values() để không lỗi parse -->
+              <select th:field="*{topic}" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="APPROVE">APPROVE</option>
+                <option value="PROJECT">PROJECT</option>
+                <option value="PAYMENT">PAYMENT</option>
+                <option value="CONTRACT">CONTRACT</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Related ID</label>
+              <input type="number" min="0" th:field="*{relatedId}" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tiêu đề</label>
+              <input type="text" th:field="*{title}" maxlength="200" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Nội dung</label>
+              <textarea th:field="*{message}" rows="6" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            <div>
+              <label class="inline-flex items-center gap-2 text-sm font-semibold text-gray-700">
+                <input type="checkbox" th:field="*{read}" class="h-4 w-4"> Đã đọc
+              </label>
+              <p class="text-xs text-gray-500 mt-1">Nếu đánh dấu đã đọc mà không nhập thời điểm, hệ thống sẽ tự gán thời điểm hiện tại.</p>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Thời điểm đọc (tùy chọn)</label>
+              <input type="datetime-local" th:field="*{readAt}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-6 border-t">
+            <a th:href="@{/admin/notifications}" class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg">Hủy</a>
+            <button type="submit" class="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg"><i class="fas fa-save mr-2"></i>Cập nhật</button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer dùng chung -->
+    <div th:replace="/admin/fragments/footer :: footer"></div>
+  </div>
+</div>
+</body>
+</html>

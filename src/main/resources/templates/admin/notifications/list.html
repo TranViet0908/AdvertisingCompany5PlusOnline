@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Thông báo - 5PLUS ONLINE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+<div class="flex">
+    <!-- Sidebar dùng chung -->
+    <div th:replace="/admin/fragments/sidebar :: sidebar"></div>
+
+    <div class="flex-1 min-h-screen ml-64">
+        <!-- Header dùng chung -->
+        <div th:replace="/admin/fragments/header :: header"></div>
+
+        <!-- Main -->
+        <main class="p-6">
+            <!-- Title + actions -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Danh sách Thông báo</h1>
+                        <p class="text-gray-600">Tìm kiếm, lọc và thao tác trên thông báo của người dùng</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a th:href="@{/admin/dashboard}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
+                            <i class="fas fa-arrow-left mr-2"></i>Về Dashboard
+                        </a>
+                        <a th:href="@{/admin/notifications/create}" class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow">
+                            <i class="fas fa-plus mr-2"></i>Thêm thông báo
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                <form class="grid grid-cols-1 md:grid-cols-12 gap-4" method="get" th:action="@{/admin/notifications}">
+                    <div class="md:col-span-4 relative">
+                        <input type="text" name="search" th:value="${search}" placeholder="Tìm theo ID, relatedId, tiêu đề, nội dung..."
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                    <div class="md:col-span-2">
+                        <select name="topic" class="w-full px-3 py-2 border rounded-lg">
+                            <option value="" th:selected="${topic == null or topic == ''}">Tất cả loại</option>
+                            <option value="APPROVE" th:selected="${topic == 'APPROVE'}">APPROVE</option>
+                            <option value="PROJECT" th:selected="${topic == 'PROJECT'}">PROJECT</option>
+                            <option value="PAYMENT" th:selected="${topic == 'PAYMENT'}">PAYMENT</option>
+                            <option value="CONTRACT" th:selected="${topic == 'CONTRACT'}">CONTRACT</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <select name="isRead" class="w-full px-3 py-2 border rounded-lg">
+                            <option value="" th:selected="${isRead == null}">Tất cả trạng thái</option>
+                            <option value="true" th:selected="${isRead == true}">Đã đọc</option>
+                            <option value="false" th:selected="${isRead == false}">Chưa đọc</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <input type="number" name="recipientUserId" th:value="${recipientUserId}" placeholder="Recipient User ID"
+                               class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    <div class="md:col-span-2 flex gap-2">
+                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                            Lọc
+                        </button>
+                        <a th:href="@{/admin/notifications}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg">Xóa lọc</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Recipient</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Topic</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Related ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nội dung</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Thời gian</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Trạng thái</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                        <tr th:if="${#lists.isEmpty(notifications)}">
+                            <td colspan="8" class="px-6 py-8 text-center text-gray-500">Không có thông báo</td>
+                        </tr>
+                        <tr th:each="n : ${notifications}" class="hover:bg-gray-50">
+                            <td class="px-6 py-3 text-sm font-medium text-gray-900" th:text="${n.id}">1</td>
+                            <td class="px-6 py-3 text-sm text-gray-700" th:text="${n.recipientUserId}">2</td>
+                            <td class="px-6 py-3">
+                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                      th:classappend="
+                        ${n.topic != null and n.topic.name() == 'APPROVE' }  ? ' bg-blue-100 text-blue-800'   :
+                        (${n.topic != null and n.topic.name() == 'PROJECT' }  ? ' bg-green-100 text-green-800' :
+                        (${n.topic != null and n.topic.name() == 'PAYMENT' }  ? ' bg-yellow-100 text-yellow-800' : ' bg-purple-100 text-purple-800'))"
+                      th:text="${n.topic}">PROJECT</span>
+                            </td>
+                            <td class="px-6 py-3 text-sm text-gray-700" th:text="${n.relatedId}">0</td>
+                            <td class="px-6 py-3 text-sm">
+                                <div class="font-semibold text-gray-900" th:text="${n.title}">Tiêu đề</div>
+                                <div class="text-gray-600 line-clamp-2" th:text="${n.message}">Nội dung...</div>
+                            </td>
+                            <td class="px-6 py-3 text-xs text-gray-500">
+                                <div th:text="${#dates.format(n.createdAt, 'dd/MM/yyyy HH:mm')}">01/09/2025 10:00</div>
+                                <div th:if="${n.readAt != null}" class="text-gray-400">Đọc: <span th:text="${#temporals.format(n.readAt, 'dd/MM/yyyy HH:mm')}">01/09/2025 11:00</span></div>
+                            </td>
+                            <td class="px-6 py-3">
+                                <span th:if="${n.read}" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">Đã đọc</span>
+                                <span th:if="${!n.read}" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">Chưa đọc</span>
+                            </td>
+                            <td class="px-6 py-3 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <a th:href="@{/admin/notifications/{id}(id=${n.id})}" class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg"><i class="fas fa-edit mr-1"></i>Sửa</a>
+                                    <a th:href="@{/admin/notifications/toggle/{id}(id=${n.id}, read=${!n.read})}"
+                                       class="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg">
+                                        <i class="fas" th:classappend="${n.read} ? ' fa-envelope' : ' fa-envelope-open'"></i>
+                                        <span th:text="${n.read} ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'">Toggle</span>
+                                    </a>
+                                    <a th:href="@{/admin/notifications/delete/{id}(id=${n.id})}"
+                                       onclick="return confirm('Xóa thông báo này?')"
+                                       class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg"><i class="fas fa-trash mr-1"></i>Xóa</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer dùng chung -->
+        <div th:replace="/admin/fragments/footer :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

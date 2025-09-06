@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông báo | 5PLUS ONLINE</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .gradient-text { background: linear-gradient(135deg, #667eea 0%, #f093fb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    .badge { font-size: 12px; padding: 2px 10px; border-radius: 9999px; font-weight: 600; }
+    .sticky-shadow { box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
+  </style>
+</head>
+<body class="bg-gray-50">
+<!-- NAVBAR: giữ giống trang chủ -->
+<nav class="bg-white shadow-lg fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center">
+        <div class="text-2xl font-bold gradient-text">
+          <i class="fas fa-plus-circle mr-2"></i>
+          <a href="/">5PLUS ONLINE</a>
+        </div>
+      </div>
+      <div class="hidden md:flex space-x-8 items-center">
+        <a href="/" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Trang chủ</a>
+        <a href="/user/notifications" class="text-blue-600 font-semibold">Thông báo</a>
+        <a href="/contact" class="text-gray-700 hover:text-blue-600 transition duration-300 font-medium">Liên hệ</a>
+
+        <!-- Nếu chưa đăng nhập -->
+        <div sec:authorize="isAnonymous()" class="space-x-3">
+          <a class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
+            <i class="fas fa-sign-in-alt mr-1"></i>Login
+          </a>
+          <a class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/register">
+            <i class="fas fa-user-plus mr-1"></i>Register
+          </a>
+        </div>
+
+        <!-- Nếu đã đăng nhập -->
+        <div sec:authorize="isAuthenticated()" class="relative">
+          <button id="userMenuBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium">
+            Xin chào, <span th:text="${#authentication.name}">User</span>
+          </button>
+          <!-- Dropdown menu -->
+          <div id="userDropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 hidden">
+            <a href="/user/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100"><i class="fa-regular fa-user mr-2"></i>Hồ sơ</a>
+            <a href="/user/notifications" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+              <i class="fa-regular fa-bell mr-2"></i>Thông báo
+              <span th:if="${unreadCount} > 0" class="ml-2 inline-flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full h-5 w-5" th:text="${unreadCount}">0</span>
+            </a>
+              <!-- Dropdown logout -->
+              <form method="post" action="/logout" class="px-4 py-2">
+                  <input type="hidden" th:if="${_csrf != null}"
+                         th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                  <button type="submit" class="w-full text-left text-gray-700 hover:bg-gray-100 px-0 py-2">
+                      <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i>Đăng xuất
+                  </button>
+              </form>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile menu btn -->
+      <div class="md:hidden">
+        <button id="mobileMenuBtn" class="text-gray-700 focus:outline-none">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+    <a href="/" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Trang chủ</a>
+    <a href="/user/notifications" class="block px-4 py-2 text-blue-600 font-semibold">Thông báo</a>
+    <a href="/contact" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Liên hệ</a>
+    <div sec:authorize="isAnonymous()">
+      <a href="/login" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Login</a>
+      <a href="/register" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Register</a>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="px-4 py-2 border-t">
+      <div class="flex items-center justify-between py-2">
+        <div>Xin chào, <span th:text="${#authentication.name}">User</span></div>
+        <a href="/user/notifications" class="relative">
+          <i class="fa-regular fa-bell"></i>
+          <span th:if="${unreadCount} > 0" class="absolute -top-2 -right-2 inline-flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full h-5 w-5" th:text="${unreadCount}">0</span>
+        </a>
+      </div>
+      <div class="flex gap-3">
+        <a href="/user/profile" class="px-3 py-2 bg-gray-100 rounded">Hồ sơ</a>
+          <!-- Mobile menu logout -->
+          <form method="post" action="/logout">
+              <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <button type="submit" class="px-3 py-2 bg-gray-100 rounded">Đăng xuất</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="pt-28 pb-16">
+  <div class="container mx-auto px-4 lg:px-8">
+    <!-- Title + actions -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+      <div>
+        <h1 class="text-2xl font-extrabold gradient-text">Thông báo</h1>
+        <p class="text-gray-500" th:if="${unreadCount} > 0" th:text="${unreadCount} + ' thông báo chưa đọc'">0 thông báo chưa đọc</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <form th:action="@{/user/notifications}" method="get" class="flex flex-wrap items-center gap-2">
+            <select name="type" class="px-3 py-2 border rounded-lg bg-white text-sm">
+                <option value="" th:selected="${filterType == null or filterType == ''}">Tất cả loại</option>
+                <option value="APPROVE"  th:selected="${filterType == 'APPROVE'}">Duyệt nội dung</option>
+                <option value="PROJECT"  th:selected="${filterType == 'PROJECT'}">Dự án</option>
+                <option value="PAYMENT"  th:selected="${filterType == 'PAYMENT'}">Thanh toán</option>
+                <option value="CONTRACT" th:selected="${filterType == 'CONTRACT'}">Hợp đồng</option>
+            </select>
+            <label class="inline-flex items-center gap-2 text-sm text-gray-700 select-none">
+            <input type="checkbox" name="unread" value="true" class="h-4 w-4" th:checked="${filterUnread}">
+            Chỉ chưa đọc
+          </label>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Lọc</button>
+        </form>
+          <!-- Nút Đánh dấu tất cả đã đọc -->
+          <form th:action="@{/user/notifications/read-all}" method="post">
+              <input type="hidden" th:if="${_csrf != null}"
+                     th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <button type="submit" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200">
+                  <i class="fa-regular fa-envelope-open mr-2"></i>Đánh dấu tất cả đã đọc
+              </button>
+          </form>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div th:if="${#lists.isEmpty(notifications)}" class="bg-white rounded-2xl p-10 text-center border">
+      <i class="fa-regular fa-bell text-4xl text-gray-400"></i>
+      <p class="mt-3 text-gray-500">Không có thông báo nào.</p>
+    </div>
+
+    <div class="space-y-3" th:if="${!#lists.isEmpty(notifications)}">
+      <div th:each="n : ${notifications}" class="bg-white rounded-2xl p-4 border card-hover flex items-start gap-4">
+        <!-- icon theo topic -->
+        <div class="shrink-0 mt-1">
+          <div th:switch="${n.topic}">
+            <div th:case="'APPROVE'" class="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-clipboard-check"></i></div>
+            <div th:case="'PROJECT'" class="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center text-green-600"><i class="fa-solid fa-briefcase"></i></div>
+            <div th:case="'PAYMENT'" class="h-10 w-10 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600"><i class="fa-solid fa-money-bill-wave"></i></div>
+            <div th:case="'CONTRACT'" class="h-10 w-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600"><i class="fa-solid fa-file-contract"></i></div>
+            <div th:case="*" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-regular fa-bell"></i></div>
+          </div>
+        </div>
+        <!-- content -->
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+                <div th:switch="${n.topic != null ? n.topic.name() : ''}">
+                    <span th:case="'APPROVE'"  class="badge text-white bg-blue-600"><span th:text="${n.topic}">TOPIC</span></span>
+                    <span th:case="'PROJECT'"  class="badge text-white bg-green-600"><span th:text="${n.topic}">TOPIC</span></span>
+                    <span th:case="'PAYMENT'"  class="badge text-white bg-yellow-600"><span th:text="${n.topic}">TOPIC</span></span>
+                    <span th:case="'CONTRACT'" class="badge text-white bg-purple-600"><span th:text="${n.topic}">TOPIC</span></span>
+                    <span th:case="*"
+                          class="badge text-white bg-gray-500"><span th:text="${n.topic}">TOPIC</span></span>
+                </div>
+
+                <span th:if="${!n.read}" class="ml-1 inline-flex h-2.5 w-2.5 bg-red-500 rounded-full" title="Chưa đọc"></span>
+            </div>
+            <h3 class="mt-1 text-base font-semibold text-gray-900" th:text="${n.title}">Tiêu đề</h3>
+          <p class="mt-1 text-sm text-gray-600 line-clamp-2" th:text="${n.message}">Nội dung thông báo...</p>
+          <div class="mt-2 text-xs text-gray-400">
+            <span title="Thời gian tạo" th:text="${#dates.format(n.createdAt, 'dd/MM/yyyy HH:mm')}">01/09/2025 12:00</span>
+            <span th:if="${n.readAt != null}"> · Đã đọc <span th:text="${#temporals.format(n.readAt, 'dd/MM/yyyy HH:mm')}">01/09/2025 13:00</span></span>
+            <span th:if="${n.relatedId != null}"> · Mã liên quan: <span th:text="${n.relatedId}">0</span></span>
+          </div>
+        </div>
+        <!-- actions -->
+        <div class="flex flex-col gap-2 items-end">
+          <a th:href="@{/user/notifications/open/{id}(id=${n.id})}" class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+            <i class="fa-solid fa-eye mr-1"></i>Xem
+          </a>
+          <a th:href="@{/user/notifications/delete/{id}(id=${n.id})}" class="px-3 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm">
+            <i class="fa-regular fa-trash-can mr-1"></i>Xóa
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER: giữ giống trang chủ (tối giản) -->
+<footer class="bg-white border-t">
+  <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
+    <div class="text-gray-600">© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> 5PLUS ONLINE. All rights reserved.</div>
+    <div class="flex items-center gap-4 text-gray-500">
+      <a href="#" class="hover:text-gray-700"><i class="fab fa-facebook"></i></a>
+      <a href="#" class="hover:text-gray-700"><i class="fab fa-youtube"></i></a>
+      <a href="#" class="hover:text-gray-700"><i class="fab fa-tiktok"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- SCRIPTS: giữ hành vi giống trang chủ -->
+<script>
+  // Navbar sticky shadow
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) navbar.classList.add('sticky-shadow');
+      else navbar.classList.remove('sticky-shadow');
+  });
+  // Mobile menu toggle
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  }
+  // User dropdown toggle
+  document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('userMenuBtn');
+      const dropdown = document.getElementById('userDropdown');
+      if (!btn || !dropdown) return;
+      btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle('hidden');
+      });
+      window.addEventListener('click', (e) => {
+          if (!btn.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.add('hidden');
+      });
+  });
+</script>
+</body>
+</html>
