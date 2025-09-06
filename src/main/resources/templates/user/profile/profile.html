@@ -42,7 +42,7 @@
             <div class="flex items-center">
                 <div class="text-2xl font-bold gradient-text">
                     <i class="fas fa-plus-circle mr-2"></i>
-                    5PLUS ONLINE
+                    <a href="/">5PLUS ONLINE</a>
                 </div>
             </div>
             <div class="hidden md:flex space-x-8 items-center">
@@ -120,75 +120,69 @@
 
                 <!-- Profile Info Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
-                        <div class="flex items-center mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4">
-                                <i class="fas fa-envelope text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 font-medium">Email</p>
-                                <p class="text-lg font-semibold text-gray-800" th:text="${user.email}">user@email.com</p>
-                            </div>
+                    <!-- Updated email card to solid blue background -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-sm h-24 flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-envelope text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600 font-medium">Email</p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" th:text="${user.email}">user@email.com</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
-                        <div class="flex items-center mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
-                                <i class="fas fa-phone text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 font-medium">Số điện thoại</p>
-                                <p class="text-lg font-semibold text-gray-800" th:text="${user.SDT}">0123456789</p>
-                            </div>
+                    <!-- Updated phone card to solid blue background -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-sm h-24 flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-phone text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600 font-medium">Số điện thoại</p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" th:text="${user.SDT}">0123456789</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200">
-                        <div class="flex items-center mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-4">
-                                <i class="fas fa-map-marker-alt text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 font-medium">Địa chỉ</p>
-                                <p class="text-lg font-semibold text-gray-800" th:text="${user.address}">Hà Nội</p>
-                            </div>
+                    <!-- Updated address card to solid blue background -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-sm h-24 flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600 font-medium">Địa chỉ</p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" th:text="${user.address}">Hà Nội</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
-                        <div class="flex items-center mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-4">
-                                <i class="fas fa-user-shield text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 font-medium">Vai trò</p>
-                                <p class="text-lg font-semibold text-gray-800" th:text="${user.role}">USER</p>
-                            </div>
+                    <!-- Updated role card to solid blue background -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-sm h-24 flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-user-shield text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600 font-medium">Vai trò</p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" th:text="${user.role}">USER</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-2xl border border-indigo-200">
-                        <div class="flex items-center mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mr-4">
-                                <i class="fas fa-calendar-plus text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 font-medium">Ngày tạo</p>
-                                <p class="text-lg font-semibold text-gray-800" th:text="${#temporals.format(user.created_at, 'dd/MM/yyyy HH:mm')}">01/08/2025</p>
-                            </div>
+                    <!-- Updated creation date card to solid blue background -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-sm h-24 flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-calendar-plus text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600 font-medium">Ngày tạo</p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" th:text="${#temporals.format(user.created_at, 'dd/MM/yyyy HH:mm')}">01/08/2025</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-2xl border border-pink-200">
-                        <div class="flex items-center mb-3">
-                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
-                                <i class="fas fa-clock text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 font-medium">Cập nhật lần cuối</p>
-                                <p class="text-lg font-semibold text-gray-800" th:text="${#temporals.format(user.updated_at, 'dd/MM/yyyy HH:mm')}">20/08/2025</p>
-                            </div>
+                    <!-- Updated last update card to solid blue background -->
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-sm h-24 flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-clock text-white text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600 font-medium">Cập nhật lần cuối</p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" th:text="${#temporals.format(user.updated_at, 'dd/MM/yyyy HH:mm')}">20/08/2025</p>
                         </div>
                     </div>
                 </div>
@@ -282,29 +276,29 @@
 <script>
     // Dropdown hồ sơ (đóng/mở, click ngoài, Esc)
     document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("userMenuBtn");
-      const dropdown = document.getElementById("userDropdown");
+        const btn = document.getElementById("userMenuBtn");
+        const dropdown = document.getElementById("userDropdown");
 
-      if (!btn || !dropdown) return;
+        if (!btn || !dropdown) return;
 
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        dropdown.classList.toggle("hidden");
-      });
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle("hidden");
+        });
 
-      document.addEventListener("click", (e) => {
-        if (!dropdown.classList.contains("hidden")
-            && !btn.contains(e.target)
-            && !dropdown.contains(e.target)) {
-          dropdown.classList.add("hidden");
-        }
-      });
+        document.addEventListener("click", (e) => {
+            if (!dropdown.classList.contains("hidden")
+                && !btn.contains(e.target)
+                && !dropdown.contains(e.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !dropdown.classList.contains("hidden")) {
-          dropdown.classList.add("hidden");
-        }
-      });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !dropdown.classList.contains("hidden")) {
+                dropdown.classList.add("hidden");
+            }
+        });
     });
 </script>
 </body>

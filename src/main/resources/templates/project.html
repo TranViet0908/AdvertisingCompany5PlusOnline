@@ -21,7 +21,7 @@
       <div class="flex items-center">
         <div class="text-2xl font-bold gradient-text">
           <i class="fas fa-plus-circle mr-2"></i>
-          5PLUS ONLINE
+          <a href="/">5PLUS ONLINE</a>
         </div>
       </div>
       <div class="hidden md:flex space-x-8 items-center">
@@ -35,7 +35,7 @@
 
         <!-- Nếu chưa đăng nhập -->
         <div sec:authorize="isAnonymous()">
-          <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
+          <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 mx-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
             <i class="fas fa-sign-in-alt me-1"></i>Login
           </a>
           <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/register">

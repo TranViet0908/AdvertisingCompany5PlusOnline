@@ -36,7 +36,7 @@
         }
         .hero-pattern {
             background-image: radial-gradient(circle at 25% 25%, #667eea 0%, transparent 50%),
-                            radial-gradient(circle at 75% 75%, #764ba2 0%, transparent 50%);
+            radial-gradient(circle at 75% 75%, #764ba2 0%, transparent 50%);
         }
         .glass-effect {
             background: rgba(255, 255, 255, 0.1);
@@ -69,7 +69,7 @@
             <div class="flex items-center">
                 <div class="text-2xl font-bold gradient-text">
                     <i class="fas fa-plus-circle mr-2"></i>
-                    5PLUS ONLINE
+                    <a href="/">5PLUS ONLINE</a>
                 </div>
             </div>
             <div class="hidden md:flex space-x-8 items-center">
@@ -83,7 +83,7 @@
 
                 <!-- Nếu chưa đăng nhập -->
                 <div sec:authorize="isAnonymous()">
-                    <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
+                    <a class="bg-gradient-to-r from-blue-500 to-purple-600 mx-2 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/login">
                         <i class="fas fa-sign-in-alt me-1"></i>Login
                     </a>
                     <a class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 font-medium" href="/register">
@@ -197,15 +197,15 @@
                         </p>
                     </div>
 
-                    <div class="bg-gradient-to-br from-orange-50 to-red-50 p-8 rounded-2xl card-hover">
+                    <div class="bg-blue-50 p-8 rounded-2xl card-hover border border-blue-100 shadow-lg">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-4">
+                            <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-md">
                                 <i class="fas fa-star text-white text-lg"></i>
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900">Giá trị cốt lõi</h3>
                         </div>
                         <p class="text-gray-700 leading-relaxed">
-                            <strong>Sáng tạo - Chuyên nghiệp - Tận tâm - Hiệu quả.</strong>
+                            <strong class="text-blue-700">Sáng tạo - Chuyên nghiệp - Tận tâm - Hiệu quả.</strong>
                             Chúng tôi luôn đặt khách hàng làm trung tâm trong mọi hoạt động,
                             cam kết mang đến những giải pháp tối ưu nhất.
                         </p>
@@ -217,7 +217,7 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl transform -rotate-3 opacity-20"></div>
                     <img src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800&h=600"
                          alt="5PLUS ONLINE Team"
-                         class="relative rounded-2xl shadow-2xl w-full h-96 object-cover transform hover:scale-105 transition duration-500">
+                         class="relative rounded-2xl shadow-2xl w-full h-96 object-cover transform hover:scale-110 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-2xl"></div>
                     <div class="absolute bottom-6 left-6 text-white">
                         <h4 class="text-xl font-bold mb-2">Đội ngũ chuyên nghiệp</h4>
@@ -354,7 +354,7 @@
                 </div>
 
                 <div class="service-card p-8 rounded-2xl shadow-lg">
-                    <div class="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 transform rotate-6">
+                    <div class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 transform rotate-6">
                         <i class="fas fa-paint-brush text-3xl text-white"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Branding & Design</h3>
@@ -412,10 +412,12 @@
 
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-2xl card-hover">
-                        <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=600&h=400"
-                             alt="VinGroup Campaign"
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="relative overflow-hidden rounded-2xl card-hover shadow-lg">
+                        <div class="w-full h-64 overflow-hidden">
+                            <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=600&h=400"
+                                 alt="VinGroup Campaign"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        </div>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500">
                             <div class="absolute bottom-6 left-6 text-white transform translate-y-4 group-hover:translate-y-0 transition duration-500">
                                 <h4 class="text-xl font-bold mb-2">Chiến dịch Tết VinGroup</h4>
@@ -427,10 +429,12 @@
                 </div>
 
                 <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-2xl card-hover">
-                        <img src="https://images.pexels.com/photos/3183165/pexels-photo-3183165.jpeg?auto=compress&cs=tinysrgb&w=600&h=400"
-                             alt="Shopee Campaign"
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="relative overflow-hidden rounded-2xl card-hover shadow-lg">
+                        <div class="w-full h-64 overflow-hidden">
+                            <img src="https://images.pexels.com/photos/3183165/pexels-photo-3183165.jpeg?auto=compress&cs=tinysrgb&w=600&h=400"
+                                 alt="Shopee Campaign"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        </div>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500">
                             <div class="absolute bottom-6 left-6 text-white transform translate-y-4 group-hover:translate-y-0 transition duration-500">
                                 <h4 class="text-xl font-bold mb-2">Shopee Brand Launch</h4>
@@ -442,10 +446,12 @@
                 </div>
 
                 <div class="group cursor-pointer">
-                    <div class="relative overflow-hidden rounded-2xl card-hover">
-                        <img src="https://images.pexels.com/photos/3183120/pexels-photo-3183120.jpeg?auto=compress&cs=tinysrgb&w=600&h=400"
-                             alt="Techcombank Rebranding"
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="relative overflow-hidden rounded-2xl card-hover shadow-lg">
+                        <div class="w-full h-64 overflow-hidden">
+                            <img src="https://dongphucvina.vn/wp-content/uploads/2023/05/logo-techcombank-dongphucvina.vn_.png"
+                                 alt="Techcombank Rebranding"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        </div>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500">
                             <div class="absolute bottom-6 left-6 text-white transform translate-y-4 group-hover:translate-y-0 transition duration-500">
                                 <h4 class="text-xl font-bold mb-2">Techcombank Rebranding</h4>
@@ -538,16 +544,16 @@
                     <form class="space-y-6" action="/contact" method="post">
                         <div class="grid md:grid-cols-2 gap-4">
                             <input type="text" name="name" placeholder="Họ tên *"
-                                   class="bg-white/20 text-white placeholder-gray-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
+                                   class="bg-white/20 text-gray-900 placeholder-gray-600 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
 
                             <input type="email" name="email" placeholder="Email *"
-                                   class="bg-white/20 text-white placeholder-gray-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
+                                   class="bg-white/20 text-gray-900 placeholder-gray-600 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
                         </div>
 
                         <input type="tel" name="phone" placeholder="Số điện thoại *"
-                               class="w-full bg-white/20 text-white placeholder-gray-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
+                               class="w-full bg-white/20 text-gray-900 placeholder-gray-600 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
 
-                        <select name="service" class="w-full bg-white/20 text-white px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
+                        <select name="service" class="w-full bg-white/20 text-gray-900 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30">
                             <option value="">Dịch vụ quan tâm</option>
                             <option value="video">Sản xuất Video</option>
                             <option value="digital">Digital Marketing</option>
@@ -556,7 +562,7 @@
                         </select>
 
                         <textarea name="message" placeholder="Mô tả dự án..." rows="4"
-                                  class="w-full bg-white/20 text-white placeholder-gray-300 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30 resize-none"></textarea>
+                                  class="w-full bg-white/20 text-gray-900 placeholder-gray-600 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 border border-white/30 resize-none"></textarea>
 
                         <button type="submit"
                                 class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition duration-300 transform hover:scale-105">
