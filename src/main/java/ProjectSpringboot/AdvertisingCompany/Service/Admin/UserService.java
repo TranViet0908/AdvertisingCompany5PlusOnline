@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -41,14 +42,17 @@ public class UserService {
     public User updateUser(Long id, User userDetails){
         User user = getUserById(id);
         user.setUsername(userDetails.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
+        // chỉ mã hoá khi có giá trị mới, tránh null
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isBlank()) {
+            user.setPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
+        }
         user.setRole(userDetails.getRole());
         user.setEmail(userDetails.getEmail());
         user.setSDT(userDetails.getSDT());
         user.setGender(userDetails.getGender());
         user.setAddress(userDetails.getAddress());
-        user.setCreated_at(userDetails.getCreated_at());
-        user.setUpdated_at(userDetails.getUpdated_at());
+        user.setUpdated_at(LocalDateTime.now());
+
         return userRepository.save(user);
     }
 
