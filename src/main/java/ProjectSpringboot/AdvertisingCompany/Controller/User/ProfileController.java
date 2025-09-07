@@ -1,7 +1,7 @@
 package ProjectSpringboot.AdvertisingCompany.Controller.User;
 
 import ProjectSpringboot.AdvertisingCompany.Entity.User;
-import ProjectSpringboot.AdvertisingCompany.Service.Admin.UserService;
+import ProjectSpringboot.AdvertisingCompany.Service.User.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     @Autowired
-    private UserService userService;
+    private UserProfileService userService;
 
     // Hiển thị trang profile
     @GetMapping("/profile")
