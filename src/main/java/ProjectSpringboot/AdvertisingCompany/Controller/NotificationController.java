@@ -2,7 +2,7 @@ package ProjectSpringboot.AdvertisingCompany.Controller;
 
 import ProjectSpringboot.AdvertisingCompany.Entity.Notification;
 import ProjectSpringboot.AdvertisingCompany.Service.NotificationService;
-import ProjectSpringboot.AdvertisingCompany.Service.UserService;
+import ProjectSpringboot.AdvertisingCompany.Service.Admin.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

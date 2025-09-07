@@ -1,7 +1,7 @@
 package ProjectSpringboot.AdvertisingCompany.Controller;
 
 import ProjectSpringboot.AdvertisingCompany.Entity.User;
-import ProjectSpringboot.AdvertisingCompany.Service.UserService;
+import ProjectSpringboot.AdvertisingCompany.Service.Admin.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
